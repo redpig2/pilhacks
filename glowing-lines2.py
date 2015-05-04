@@ -7,6 +7,9 @@ im = Image.new('RGB', (W, W))
 NCOLORS = 19
 NLINES = 15
 
+def filled_circle(draw, x, y, r, fill):
+  draw.ellipse((x-r, y-r, x+r, y+r), fill=fill)
+
 def make_line_mask(im):
   mask = Image.new('L', im.size, color=0)
 
@@ -19,8 +22,11 @@ def make_line_mask(im):
 
   draw=ImageDraw.Draw(mask)
   y = im.size[1]/2
+  r = NCOLORS/2
   for i in range(NCOLORS):
-    draw.line((0,y, im.size[0], y), fill=grays[i], width=NCOLORS-i)
+    draw.line((r, y, im.size[0]-r, y), fill=grays[i], width=NCOLORS-i)
+    filled_circle(draw, r, y, (NCOLORS-i)/2, grays[i])
+    filled_circle(draw, im.size[0]-r, y, (NCOLORS-i)/2, grays[i])
   
   mask.save('mask.png')
   return mask
